@@ -32,7 +32,7 @@ const CreateTrainRoute: React.FC = () => {
           departure,
           arrival,
           departureTime: formatDateTime(departureTime),
-          arrivalTime: formatDateTime(departureTime),
+          arrivalTime: formatDateTime(arrivalTime),
         });
 
         router.push(`train/${result.id}`);
