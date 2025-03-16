@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Loading from '../common/Loading';
 import Error from '../common/Error';
+import OptionalRender from '../common/OptionalRender';
 import { Train } from '@/services/trainService';
 import { formatDate } from '@/utils/utils';
 import { TicketService } from '@/services/ticketService';
@@ -12,7 +13,7 @@ interface TrainTicket {
   canEdit: boolean;
 }
 
-const TrainTicket: React.FC<TrainTicket> = ({ ticket }) => {
+const TrainTicket: React.FC<TrainTicket> = ({ ticket, owned, canEdit }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,12 +60,16 @@ const TrainTicket: React.FC<TrainTicket> = ({ ticket }) => {
         <button onClick={handleView} className="btn-small btn-small-blue">
           View
         </button>
-        <button onClick={handleEdit} className="btn-small btn-small-blue">
-          Edit
-        </button>
-        <button onClick={handleCancel} className="btn-small btn-small-red">
-          Cancel
-        </button>
+        <OptionalRender condition={canEdit}>
+          <button onClick={handleEdit} className="btn-small btn-small-blue">
+            Edit
+          </button>
+        </OptionalRender>
+        <OptionalRender condition={owned}>
+          <button onClick={handleCancel} className="btn-small btn-small-red">
+            Cancel
+          </button>
+        </OptionalRender>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import TrainForm from '@/components/shared/TrainForm';
 import { FormField } from '@/utils/utils';
 import { TrainFormErrors } from '@/components/shared/TrainForm';
 import { TrainService } from '@/services/trainService';
+import { formatDateTime } from '@/utils/utils';
 
 const CreateTrainRoute: React.FC = () => {
   const [departure, setDeparture] = useState('');
@@ -30,8 +31,8 @@ const CreateTrainRoute: React.FC = () => {
           name: `${departure}-${arrival}`,
           departure,
           arrival,
-          departureTime: new Date(departureTime),
-          arrivalTime: new Date(departureTime),
+          departureTime: formatDateTime(departureTime),
+          arrivalTime: formatDateTime(departureTime),
         });
 
         router.push(`train/${result.id}`);
@@ -94,10 +95,10 @@ const CreateTrainRoute: React.FC = () => {
         setArrival(value.trim());
         break;
       case FormField.DepartureTime:
-        setDepartureTime(value.trim());
+        setDepartureTime(value);
         break;
       case FormField.ArrivalTime:
-        setArrivalTime(value.trim());
+        setArrivalTime(value);
         break;
       default:
         break;

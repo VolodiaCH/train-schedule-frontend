@@ -18,14 +18,14 @@ const Filters: React.FC<FilterProps> = (props) => {
     <div className="mb-6 grid grid-cols-2 gap-4">
       <input
         type="text"
-        placeholder="Departure"
+        placeholder="Departure filter"
         value={props.searchDeparture}
         onChange={(e) => props.setSearchDeparture(e.target.value)}
         className="p-2 border rounded w-full"
       />
       <input
         type="text"
-        placeholder="Arrival"
+        placeholder="Arrival filter"
         value={props.searchArrival}
         onChange={(e) => props.setSearchArrival(e.target.value)}
         className="p-2 border rounded w-full"

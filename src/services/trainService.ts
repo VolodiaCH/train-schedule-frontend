@@ -5,8 +5,8 @@ export interface Train {
   name: string;
   departure: string;
   arrival: string;
-  departureTime: Date;
-  arrivalTime: Date;
+  departureTime: string;
+  arrivalTime: string;
 }
 
 export class TrainService {
@@ -22,8 +22,11 @@ export class TrainService {
     return ApiService.get<Train>(`/train/${id}`);
   }
 
-  static async updateTrainDetails(trainDetails: Train): Promise<Train> {
-    return ApiService.put<Train, Train>('/train/update-details', trainDetails);
+  static async updateTrainDetails(
+    id: string,
+    trainDetails: Train
+  ): Promise<Train> {
+    return ApiService.put<Train, Train>(`/train/${id}`, trainDetails);
   }
 
   static async deleteTrain(id: string): Promise<object> {

@@ -1,37 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import TrainForm from '@/components/shared/TrainForm';
 import Loading from '@/components/common/Loading';
 import Error from '@/components/common/Error';
 import { FormField } from '@/utils/utils';
 import { TrainFormErrors } from '@/components/shared/TrainForm';
 import { TrainService, Train } from '@/services/trainService';
+import { formatDateTime } from '@/utils/utils';
 
 interface EditTrainRouteProps {
   trainData: Train;
 }
 
-const formatDateTimeLocal = (date: Date) => {
-  return date.toISOString().slice(0, 16);
-};
-
 const EditTrainRoute: React.FC<EditTrainRouteProps> = ({ trainData }) => {
   const defaultDepartureRef = useRef(trainData.departure);
   const defaultArrivalRef = useRef(trainData.arrival);
   const defaultDepartureTimeRef = useRef(
-    formatDateTimeLocal(new Date(trainData.departureTime))
+    formatDateTime(trainData.departureTime)
   );
-  const defaultArrivalTimeRef = useRef(
-    formatDateTimeLocal(new Date(trainData.arrivalTime))
-  );
+  const defaultArrivalTimeRef = useRef(formatDateTime(trainData.arrivalTime));
 
   const [departure, setDeparture] = useState(trainData.departure);
   const [arrival, setArrival] = useState(trainData.arrival);
   const [departureTime, setDepartureTime] = useState<string>(
-    formatDateTimeLocal(new Date(trainData.departureTime))
+    formatDateTime(trainData.departureTime)
   );
   const [arrivalTime, setArrivalTime] = useState<string>(
-    formatDateTimeLocal(new Date(trainData.arrivalTime))
+    formatDateTime(trainData.arrivalTime)
   );
   const [errors, setErrors] = useState<TrainFormErrors | null>(null);
   const [loading, setLoading] = useState(false);
@@ -39,6 +34,7 @@ const EditTrainRoute: React.FC<EditTrainRouteProps> = ({ trainData }) => {
   const [disabledSubmit, setDisabledSubmit] = useState(true);
 
   const router = useRouter();
+  const { id } = router.query;
 
   useEffect(() => {
     setDisabledSubmit(
@@ -61,11 +57,11 @@ const EditTrainRoute: React.FC<EditTrainRouteProps> = ({ trainData }) => {
           ...trainData,
           departure,
           arrival,
-          departureTime: new Date(departureTime),
-          arrivalTime: new Date(arrivalTime),
+          departureTime,
+          arrivalTime,
         };
 
-        await TrainService.updateTrainDetails(newTrainData);
+        await TrainService.updateTrainDetails(id as string, newTrainData);
 
         defaultDepartureRef.current = departure;
         defaultArrivalRef.current = arrival;
@@ -129,10 +125,10 @@ const EditTrainRoute: React.FC<EditTrainRouteProps> = ({ trainData }) => {
         setArrival(value.trim());
         break;
       case FormField.DepartureTime:
-        setDepartureTime(value.trim());
+        setDepartureTime(value);
         break;
       case FormField.ArrivalTime:
-        setArrivalTime(value.trim());
+        setArrivalTime(value);
         break;
       default:
         break;

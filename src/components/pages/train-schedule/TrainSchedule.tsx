@@ -24,17 +24,26 @@ const TrainSchedule: React.FC<TrainScheduleProps> = ({
   const { isAdmin } = useContext(AuthContext);
 
   const filteredTickets = tickets
-    .filter(
-      (ticket) =>
+    .filter((ticket) => {
+      const departureTime = new Date(ticket.departureTime).getTime();
+      const startTime = startDate ? new Date(startDate).getTime() : null;
+      const endTime = endDate
+        ? new Date(endDate).setHours(23, 59, 59, 999)
+        : null;
+
+      return (
         advancedIncludes(ticket.departure, searchDeparture) &&
         advancedIncludes(ticket.arrival, searchArrival) &&
-        (!startDate || new Date(ticket.departureTime) >= new Date(startDate)) &&
-        (!endDate || new Date(ticket.departureTime) <= new Date(endDate))
-    )
+        (!startTime || departureTime >= startTime) &&
+        (!endTime || departureTime <= endTime)
+      );
+    })
     .sort((a, b) =>
       sortOrder === 'asc'
-        ? a.departureTime.getTime() - b.departureTime.getTime()
-        : b.departureTime.getTime() - a.departureTime.getTime()
+        ? new Date(a.departureTime).getTime() -
+          new Date(b.departureTime).getTime()
+        : new Date(b.departureTime).getTime() -
+          new Date(a.departureTime).getTime()
     );
 
   return (
