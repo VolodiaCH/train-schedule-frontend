@@ -80,8 +80,9 @@ const TrainSchedule: React.FC<TrainScheduleProps> = ({
       <div className="space-y-4">
         <OptionalRender condition={paginatedTickets.length > 0}>
           {paginatedTickets.map((ticket) => {
-            const booked: boolean =
-              bookedTrains?.findIndex((train) => train.id === ticket.id) !== -1;
+            const booked =
+              bookedTrains !== null &&
+              bookedTrains.findIndex((train) => train.id === ticket.id) !== -1;
 
             return (
               <TrainTicket
