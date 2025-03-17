@@ -17,21 +17,27 @@ const Pagination: React.FC<PaginationProps> = ({
   const maxPagesToShow = 3;
 
   if (totalPages <= maxPagesToShow) {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+  } else {
+    const showLeftEllipsis = currentPage > 3;
+    const showRightEllipsis = currentPage < totalPages - 2;
+
+    if (showLeftEllipsis) pages.push(1, '...');
+
+    for (
+      let i = Math.max(1, currentPage - 1);
+      i <= Math.min(totalPages, currentPage + 1);
+      i++
+    ) {
+      pages.push(i);
+    }
+
+    if (showRightEllipsis) pages.push('...', totalPages);
   }
 
-  const showLeftEllipsis = currentPage > 3;
-  const showRightEllipsis = currentPage < totalPages - 2;
-
-  if (showLeftEllipsis) pages.push(1, '...');
-  for (
-    let i = Math.max(1, currentPage - 1);
-    i <= Math.min(totalPages, currentPage + 1);
-    i++
-  ) {
-    pages.push(i);
-  }
-  if (showRightEllipsis) pages.push('...', totalPages);
+  console.log('Pagination Pages:', pages);
 
   const buttonClass =
     'px-3 py-2 border rounded-md bg-white shadow-sm hover:bg-gray-100 disabled:opacity-50';

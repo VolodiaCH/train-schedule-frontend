@@ -100,13 +100,13 @@ const TrainSchedule: React.FC<TrainScheduleProps> = ({
         </OptionalRender>
       </div>
 
-      {totalPages > 1 && (
+      <OptionalRender condition={totalPages > 1}>
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
         />
-      )}
+      </OptionalRender>
     </div>
   );
 };
